@@ -2,8 +2,8 @@ name: Global Job Hunter
 
 on:
   schedule:
-    - cron: "0 8 * * *"   # 8 AM UTC daily
-  workflow_dispatch:        # manual trigger anytime
+    - cron: "0 8 * * *"
+  workflow_dispatch:
 
 jobs:
   run-for-all-users:
@@ -29,14 +29,13 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run job hunter
-        working-directory: scripts
         env:
-          SHEET_CSV_URL:   ${{ secrets.SHEET_CSV_URL }}
-          GMAIL_USER:      ${{ secrets.GMAIL_USER }}
-          GMAIL_PASS:      ${{ secrets.GMAIL_PASS }}
-          ADZUNA_APP_ID:   ${{ secrets.ADZUNA_APP_ID }}
-          ADZUNA_APP_KEY:  ${{ secrets.ADZUNA_APP_KEY }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SHEET_CSV_URL:      ${{ secrets.SHEET_CSV_URL }}
+          GMAIL_USER:         ${{ secrets.GMAIL_USER }}
+          GMAIL_PASS:         ${{ secrets.GMAIL_PASS }}
+          ADZUNA_APP_ID:      ${{ secrets.ADZUNA_APP_ID }}
+          ADZUNA_APP_KEY:     ${{ secrets.ADZUNA_APP_KEY }}
+          ANTHROPIC_API_KEY:  ${{ secrets.ANTHROPIC_API_KEY }}
         run: python main.py
 
       - name: Save seen jobs cache
