@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Job Hunter — Sign up</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:      #0f1117;
+    --ink-2:    #4a4f5e;
+    --ink-3:    #9298a8;
+    --line:     #e4e6ec;
+    --bg:       #f7f8fc;
+    --white:    #ffffff;
+    --blue:     #2563eb;
+    --blue-lt:  #eff4ff;
+    --green:    #16a34a;
+    --green-lt: #f0fdf4;
+    --red:      #dc2626;
+    --red-lt:   #fef2f2;
+    --radius:   10px;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 0 0 80px;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    background: var(--ink);
+    color: var(--white);
+    padding: 56px 24px 48px;
+    text-align: center;
+  }
+  .hero-label {
+    font-size: 12px;
+    letter-spacing: .12em;
+    color: var(--ink-3);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .hero h1 span { color: #60a5fa; }
+  .hero p {
+    font-size: 16px;
+    color: #94a3b8;
+    max-width: 480px;
+    margin: 0 auto 28px;
+    line-height: 1.6;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num { font-size: 22px; font-weight: 600; color: var(--white); }
+  .stat-label { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+
+  /* ── Form card ── */
+  .form-outer {
+    max-width: 640px;
+    margin: -20px auto 0;
+    padding: 0 16px;
+  }
+  .form-card {
+    background: var(--white);
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .form-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--line);
+  }
+  .tab {
+    flex: 1;
+    padding: 14px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-3);
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color .15s, border-color .15s;
+  }
+  .tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+  .form-body { padding: 28px 28px 24px; }
+  @media(max-width:500px){ .form-body { padding: 20px 16px 18px; } }
+
+  .section-head {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--ink-3);
+    margin: 24px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  .section-head:first-child { margin-top: 0; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media(max-width:480px){ .grid-2 { grid-template-columns: 1fr; } }
+
+  .field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
+  .field:last-child { margin-bottom: 0; }
+  label { font-size: 13px; font-weight: 500; color: var(--ink); }
+  .hint { font-size: 12px; color: var(--ink-3); }
+  .req { color: var(--red); margin-left: 2px; }
+
+  input, select, textarea {
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 9px 12px;
+    transition: border-color .15s, box-shadow .15s;
+    outline: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+    background: var(--white);
+  }
+  textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
+  select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239298a8' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+
+  .err { font-size: 12px; color: var(--red); display: none; margin-top: 2px; }
+  .field.has-error input, .field.has-error select, .field.has-error textarea {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(220,38,38,.08);
+  }
+  .field.has-error .err { display: block; }
+
+  /* chips */
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+  .chip {
+    font-size: 13px;
+    padding: 5px 13px;
+    border-radius: 20px;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: all .15s;
+    user-select: none;
+  }
+  .chip.on {
+    background: var(--blue-lt);
+    border-color: #bfdbfe;
+    color: var(--blue);
+    font-weight: 500;
+  }
+
+  /* currency note */
+  .currency-note {
+    font-size: 12px;
+    color: var(--blue);
+    margin-top: 4px;
+  }
+
+  /* progress */
+  .progress-wrap { padding: 0 28px 20px; }
+  .progress-bar {
+    height: 3px;
+    background: var(--line);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--blue);
+    border-radius: 2px;
+    transition: width .3s;
+    width: 0%;
+  }
+  .progress-label {
+    font-size: 12px;
+    color: var(--ink-3);
+    margin-top: 6px;
+    text-align: right;
+  }
+
+  /* submit */
+  .submit-wrap { padding: 20px 28px 24px; border-top: 1px solid var(--line); }
+  .submit-btn {
+    width: 100%;
+    padding: 13px;
+    border-radius: var(--radius);
+    border: none;
+    background: var(--blue);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background .15s, transform .1s;
+  }
+  .submit-btn:hover { background: #1d4ed8; }
+  .submit-btn:active { transform: scale(.99); }
+  .submit-btn:disabled { background: var(--ink-3); cursor: not-allowed; }
+  .privacy { font-size: 12px; color: var(--ink-3); text-align: center; margin-top: 10px; }
+
+  /* success screen */
+  .success {
+    display: none;
+    text-align: center;
+    padding: 48px 28px;
+  }
+  .success-icon {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--green-lt);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 26px;
+  }
+  .success h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  .success p { font-size: 14px; color: var(--ink-2); line-height: 1.6; max-width: 360px; margin: 0 auto; }
+
+  /* error banner */
+  .error-banner {
+    display: none;
+    background: var(--red-lt);
+    border: 1px solid #fecaca;
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--red);
+    margin: 0 28px 16px;
+  }
+
+  /* loading spinner */
+  .spinner {
+    display: inline-block;
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,.4);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* how it works */
+  .how { max-width: 640px; margin: 32px auto 0; padding: 0 16px; }
+  .how h2 { font-size: 18px; font-weight: 600; margin-bottom: 16px; text-align: center; }
+  .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+  .step-card {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px;
+  }
+  .step-num { font-size: 12px; font-weight: 600; color: var(--blue); margin-bottom: 6px; }
+  .step-card p { font-size: 13px; color: var(--ink-2); line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-label">Global Job Hunter</div>
+  <h1>Your job search,<br><span>on autopilot</span></h1>
+  <p>Fill in your details once. Get a daily email of matched jobs with a tailored CV and cover letter — for any country.</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">30,000+</div><div class="stat-label">Companies tracked</div></div>
+    <div class="stat"><div class="stat-num">12</div><div class="stat-label">Countries supported</div></div>
+    <div class="stat"><div class="stat-num">Daily</div><div class="stat-label">Email digest</div></div>
+  </div>
+</div>
+
+<div class="form-outer">
+  <div class="form-card">
+
+    <div class="form-tabs">
+      <button class="tab active" onclick="showTab(0)">Your details</button>
+      <button class="tab" onclick="showTab(1)">Job preferences</button>
+      <button class="tab" onclick="showTab(2)">Your CV</button>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+      <div class="progress-label" id="prog-label">0% complete</div>
+    </div>
+
+    <div class="error-banner" id="err-banner"></div>
+
+    <!-- Tab 0: Details -->
+    <div class="form-body" id="tab-0">
+      <div class="section-head">About you</div>
+      <div class="grid-2">
+        <div class="field" id="f-name-wrap">
+          <label>Full name <span class="req">*</span></label>
+          <input id="f-name" type="text" placeholder="Rohan Ajila" oninput="clearErr('f-name-wrap');updateProgress()">
+          <div class="err">Enter your name.</div>
+        </div>
+        <div class="field" id="f-email-wrap">
+          <label>Email <span class="req">*</span></label>
+          <input id="f-email" type="email" placeholder="rohan@email.com" oninput="clearErr('f-email-wrap');updateProgress()">
+          <div class="err">Enter a valid email.</div>
+        </div>
+      </div>
+
+      <div class="section-head">Location</div>
+      <div class="grid-2">
+        <div class="field" id="f-country-wrap">
+          <label>Country <span class="req">*</span></label>
+          <select id="f-country" onchange="onCountry();clearErr('f-country-wrap');updateProgress()">
+            <option value="">Select country…</option>
+            <option value="ie">🇮🇪 Ireland</option>
+            <option value="gb">🇬🇧 United Kingdom</option>
+            <option value="us">🇺🇸 United States</option>
+            <option value="in">🇮🇳 India</option>
+            <option value="de">🇩🇪 Germany</option>
+            <option value="fr">🇫🇷 France</option>
+            <option value="au">🇦🇺 Australia</option>
+            <option value="ca">🇨🇦 Canada</option>
+            <option value="nz">🇳🇿 New Zealand</option>
+            <option value="za">🇿🇦 South Africa</option>
+            <option value="pl">🇵🇱 Poland</option>
+            <option value="br">🇧🇷 Brazil</option>
+          </select>
+          <div class="err">Select your country.</div>
+        </div>
+        <div class="field" id="f-city-wrap">
+          <label>City <span class="req">*</span></label>
+          <input id="f-city" type="text" placeholder="Dublin" oninput="clearErr('f-city-wrap');updateProgress()">
+          <div class="err">Enter your city.</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Open to remote / hybrid?</label>
+        <div class="chips" id="chips-remote">
+          <div class="chip on" onclick="pickChip('chips-remote',this)">Remote OK</div>
+          <div class="chip" onclick="pickChip('chips-remote',this)">Hybrid OK</div>
+          <div class="chip" onclick="pickChip('chips-remote',this)">On-site only</div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;display:flex;justify-content:flex-end">
+        <button class="submit-btn" style="width:auto;padding:10px 28px" onclick="showTab(1)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Tab 1: Job preferences -->
+    <div class="form-body" id="tab-1" style="display:none">
+      <div class="section-head">What you're looking for</div>
+      <div class="grid-2">
+        <div class="field" id="f-title-wrap">
+          <label>Job title <span class="req">*</span></label>
+          <input id="f-title" type="text" placeholder="Software Engineer" oninput="clearErr('f-title-wrap');updateProgress()">
+          <div class="err">Enter a job title.</div>
+        </div>
+        <div class="field">
+          <label>Seniority level</label>
+          <select id="f-level">
+            <option value="any">Any level</option>
+            <option value="junior">Junior (0–2 yrs)</option>
+            <option value="mid" selected>Mid-level (2–5 yrs)</option>
+            <option value="senior">Senior (5+ yrs)</option>
+            <option value="lead">Lead / manager</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Key skills</label>
+        <div class="hint">Comma-separated — used to rank and filter jobs</div>
+        <input id="f-skills" type="text" placeholder="React, Node.js, TypeScript, AWS, Python">
+      </div>
+      <div class="field">
+        <label>Employment type</label>
+        <div class="chips" id="chips-type">
+          <div class="chip on" onclick="pickChip('chips-type',this)">Permanent</div>
+          <div class="chip" onclick="pickChip('chips-type',this)">Contract</div>
+          <div class="chip" onclick="pickChip('chips-type',this)">Either</div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Minimum salary</label>
+          <input id="f-salary" type="number" placeholder="75000" oninput="updateProgress()">
+          <div class="currency-note" id="currency-note">Currency: EUR (Ireland)</div>
+        </div>
+        <div class="field">
+          <label>Max jobs per email</label>
+          <select id="f-maxjobs">
+            <option value="5">5 jobs</option>
+            <option value="10" selected>10 jobs</option>
+            <option value="20">20 jobs</option>
+            <option value="50">50 jobs</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Digest frequency</label>
+        <div class="chips" id="chips-freq">
+          <div class="chip on" onclick="pickChip('chips-freq',this)">Daily at 8 AM</div>
+          <div class="chip" onclick="pickChip('chips-freq',this)">Twice daily</div>
+          <div class="chip" onclick="pickChip('chips-freq',this)">Weekdays only</div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;display:flex;justify-content:space-between">
+        <button class="submit-btn" style="width:auto;padding:10px 24px;background:#f1f5f9;color:#4a4f5e;border:1px solid #e4e6ec" onclick="showTab(0)">← Back</button>
+        <button class="submit-btn" style="width:auto;padding:10px 28px" onclick="showTab(2)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Tab 2: CV -->
+    <div class="form-body" id="tab-2" style="display:none">
+      <div class="section-head">Your CV — used for AI tailoring</div>
+      <div class="field" id="f-cv-wrap">
+        <label>Paste your CV text <span class="req">*</span></label>
+        <div class="hint">Copy-paste from Word or PDF. The AI uses this to tailor your CV and write cover letters for each matched job.</div>
+        <textarea id="f-cv" rows="8" placeholder="Rohan Ajila&#10;Senior Software Engineer&#10;&#10;Experience&#10;Associate Tech Lead — Novus Technologies (2022–2024)&#10;Built payment gateway platform handling 3M+ transactions/month..." oninput="clearErr('f-cv-wrap');updateProgress()"></textarea>
+        <div class="err">Paste your CV so we can tailor it per job.</div>
+      </div>
+      <div class="field">
+        <label>Existing cover letter <span style="font-size:12px;color:var(--ink-3)">(optional)</span></label>
+        <div class="hint">Used as a style reference for AI-written letters</div>
+        <textarea id="f-cover" rows="4" placeholder="Dear Hiring Manager,&#10;I'm a software engineer with 5 years of experience..."></textarea>
+      </div>
+
+      <div style="margin-top:20px;display:flex;justify-content:space-between">
+        <button class="submit-btn" style="width:auto;padding:10px 24px;background:#f1f5f9;color:#4a4f5e;border:1px solid #e4e6ec" onclick="showTab(1)">← Back</button>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-wrap" id="submit-wrap">
+      <button class="submit-btn" id="submit-btn" onclick="submitForm()">Register and start getting jobs</button>
+      <p class="privacy">Your data is stored in a private spreadsheet. Reply "unsubscribe" to any email to stop.</p>
+    </div>
+
+    <!-- Success -->
+    <div class="success" id="success-screen">
+      <div class="success-icon">✓</div>
+      <h2>You're in!</h2>
+      <p>Check your inbox tomorrow morning for your first job digest. We'll find matches across 30,000+ companies in <span id="success-country">your country</span>.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- How it works -->
+<div class="how">
+  <h2>How it works</h2>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">Step 1</div>
+      <p>Fill in your profile once — job title, location, skills, CV</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">Step 2</div>
+      <p>Every morning we scan 30,000+ company portals in your country</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">Step 3</div>
+      <p>Jobs are scored and ranked against your profile and skills</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">Step 4</div>
+      <p>AI tailors your CV and writes a cover letter for the top 3 matches</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">Step 5</div>
+      <p>You get one clean email — apply in minutes, not hours</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── CONFIG: replace with your Google Apps Script URL after deploying ──
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzbwTNpdky1xHNSpiGF9pnDq4fryLetUnkofF4H-itvnBaXhmA-fse9U6fSE1G-NGIYWw/exec";
+
+  const CURRENCIES = {ie:"EUR",gb:"GBP",us:"USD",in:"INR",de:"EUR",fr:"EUR",au:"AUD",ca:"CAD",nz:"NZD",za:"ZAR",pl:"PLN",br:"BRL"};
+  const COUNTRY_NAMES = {ie:"Ireland",gb:"United Kingdom",us:"United States",in:"India",de:"Germany",fr:"France",au:"Australia",ca:"Canada",nz:"New Zealand",za:"South Africa",pl:"Poland",br:"Brazil"};
+  const CITY_HINTS = {ie:"Dublin",gb:"London",us:"New York",in:"Bangalore",de:"Berlin",fr:"Paris",au:"Sydney",ca:"Toronto",nz:"Auckland",za:"Cape Town",pl:"Warsaw",br:"São Paulo"};
+
+  let currentTab = 0;
+
+  function showTab(n) {
+    [0,1,2].forEach(i => {
+      document.getElementById('tab-'+i).style.display = i===n ? 'block' : 'none';
+      document.querySelectorAll('.tab')[i].classList.toggle('active', i===n);
+    });
+    currentTab = n;
+    document.getElementById('submit-wrap').style.display = n===2 ? 'block' : 'none';
+  }
+
+  function pickChip(groupId, el) {
+    document.getElementById(groupId).querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+    el.classList.add('on');
+  }
+
+  function getChip(groupId) {
+    const on = document.getElementById(groupId).querySelector('.chip.on');
+    return on ? on.textContent.trim() : '';
+  }
+
+  function onCountry() {
+    const v = document.getElementById('f-country').value;
+    const cur = CURRENCIES[v] || 'Local currency';
+    const name = COUNTRY_NAMES[v] || '';
+    document.getElementById('currency-note').textContent = 'Currency: ' + cur + (name ? ' (' + name + ')' : '');
+    if (CITY_HINTS[v]) document.getElementById('f-city').placeholder = CITY_HINTS[v];
+  }
+
+  function clearErr(wrapId) {
+    document.getElementById(wrapId).classList.remove('has-error');
+  }
+
+  function showErr(wrapId) {
+    document.getElementById(wrapId).classList.add('has-error');
+  }
+
+  const REQUIRED = [
+    {id:'f-name',  wrap:'f-name-wrap',    check: v => v.length > 1},
+    {id:'f-email', wrap:'f-email-wrap',   check: v => /\S+@\S+\.\S+/.test(v)},
+    {id:'f-country',wrap:'f-country-wrap',check: v => v !== ''},
+    {id:'f-city',  wrap:'f-city-wrap',    check: v => v.length > 1},
+    {id:'f-title', wrap:'f-title-wrap',   check: v => v.length > 1},
+    {id:'f-cv',    wrap:'f-cv-wrap',      check: v => v.length > 50},
+  ];
+
+  function updateProgress() {
+    const filled = REQUIRED.filter(r => r.check(document.getElementById(r.id).value.trim())).length;
+    const pct = Math.round(filled / REQUIRED.length * 100);
+    document.getElementById('prog').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = pct + '% complete';
+  }
+
+  function validate() {
+    let ok = true;
+    REQUIRED.forEach(r => {
+      if (!r.check(document.getElementById(r.id).value.trim())) {
+        showErr(r.wrap); ok = false;
+      }
+    });
+    return ok;
+  }
+
+  async function submitForm() {
+    hideBanner();
+    if (!validate()) {
+      showBanner('Please fill in all required fields (marked with *) across all three tabs.');
+      return;
+    }
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Registering…';
+
+    const country = document.getElementById('f-country').value;
+    const data = {
+      timestamp:        new Date().toISOString(),
+      full_name:        document.getElementById('f-name').value.trim(),
+      email:            document.getElementById('f-email').value.trim(),
+      country_code:     country,
+      city:             document.getElementById('f-city').value.trim(),
+      remote_pref:      getChip('chips-remote'),
+      job_title:        document.getElementById('f-title').value.trim(),
+      seniority:        document.getElementById('f-level').value,
+      skills:           document.getElementById('f-skills').value.trim(),
+      employment_type:  getChip('chips-type'),
+      min_salary:       document.getElementById('f-salary').value.trim(),
+      max_jobs:         document.getElementById('f-maxjobs').value,
+      cv_text:          document.getElementById('f-cv').value.trim(),
+      cover_letter:     document.getElementById('f-cover').value.trim(),
+      digest_freq:      getChip('chips-freq'),
+      active:           'yes',
+    };
+
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data),
+      });
+      document.getElementById('success-country').textContent = COUNTRY_NAMES[country] || 'your country';
+      document.querySelector('.form-tabs').style.display = 'none';
+      document.querySelector('.progress-wrap').style.display = 'none';
+      document.getElementById('tab-0').style.display = 'none';
+      document.getElementById('tab-1').style.display = 'none';
+      document.getElementById('tab-2').style.display = 'none';
+      document.getElementById('submit-wrap').style.display = 'none';
+      document.getElementById('success-screen').style.display = 'block';
+    } catch(e) {
+      btn.disabled = false;
+      btn.textContent = 'Register and start getting jobs';
+      showBanner('Something went wrong. Please try again or contact the admin.');
+    }
+  }
+
+  function showBanner(msg) {
+    const b = document.getElementById('err-banner');
+    b.textContent = msg;
+    b.style.display = 'block';
+  }
+  function hideBanner() {
+    document.getElementById('err-banner').style.display = 'none';
+  }
+
+  showTab(0);
+</script>
+</body>
+</html>
